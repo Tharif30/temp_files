@@ -1,7 +1,11 @@
 SELECT
     CAST([StartTime] AS date) AS ExecutionDate,
     [storedprocedure],
-    COUNT(*) AS ExecutionCount
+    COUNT(DISTINCT CONCAT(
+        CAST([SPID] AS varchar(20)),
+        '|',
+        CONVERT(varchar(30), [StartTime], 121)
+    )) AS ExecutionCount
 FROM [DBADB].[dbo].[longqrydetails]
 WHERE [StartTime] >= DATEADD(DAY, -21, CAST(GETDATE() AS date))
   AND [storedprocedure] IS NOT NULL
